@@ -14,32 +14,29 @@ connection.connect()
 
 channel = connection.channel()
 
-exchange = kombu.entity.Exchange(name='kombu-test',
+exchange = kombu.entity.Exchange(name='topic-test',
                                  type='topic',
                                  durable=False,
                                  auto_delete=False)
 
 producer = kombu.messaging.Producer(exchange=exchange,
                                     channel=channel,
-                                    routing_key='topic1')
+                                    routing_key='msg.green.topic')
 
-#These three queues have the same routing key as the producer
-queue = kombu.Queue(name='queue1', exchange=exchange, routing_key='topic1')
+queue = kombu.Queue(name='queue-black', exchange=exchange, routing_key='*.black')
 queue.maybe_bind(connection)
 queue.declare()
 
-queue = kombu.Queue(name='queue2', exchange=exchange, routing_key='topic1')
+queue = kombu.Queue(name='queue-red', exchange=exchange, routing_key='*.red')
 queue.maybe_bind(connection)
 queue.declare()
 
-queue = kombu.Queue(name='queue3', exchange=exchange, routing_key='topic1')
+queue = kombu.Queue(name='queue-green', exchange=exchange, routing_key='*.green.*')
 queue.maybe_bind(connection)
 queue.declare()
 
-#Note this queue has a different routing_key and there the producer does
-#not send messages to it
-queue = kombu.Queue(name='queue4', exchange=exchange, routing_key='topic2')
+queue = kombu.Queue(name='queue-allcolours', exchange=exchange, routing_key='msg.#')
 queue.maybe_bind(connection)
 queue.declare()
 
-producer.publish('foo')
+producer.publish('green')
