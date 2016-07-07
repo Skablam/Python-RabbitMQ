@@ -29,4 +29,4 @@ def process_message(body, message):
 consumer = kombu.Consumer(connection, queues=queue1, callbacks=[process_message], accept=[])
 consumer.consume()
 
-connection.drain_events(timeout=10)
+connection.drain_events(timeout=1)
