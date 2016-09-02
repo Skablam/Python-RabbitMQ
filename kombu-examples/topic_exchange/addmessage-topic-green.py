@@ -15,9 +15,7 @@ connection.connect()
 channel = connection.channel()
 
 exchange = kombu.entity.Exchange(name='topic-test',
-                                 type='topic',
-                                 durable=False,
-                                 auto_delete=False)
+                                 type='topic')
 
 producer = kombu.messaging.Producer(exchange=exchange,
                                     channel=channel,

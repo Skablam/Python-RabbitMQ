@@ -1,6 +1,7 @@
 import kombu.connection
 import kombu.entity
 import kombu.messaging
+import uuid
 
 params = {
     'hostname': 'localhost',
@@ -15,9 +16,7 @@ connection.connect()
 channel = connection.channel()
 
 exchange = kombu.entity.Exchange(name='topic-test',
-                                 type='topic',
-                                 durable=False,
-                                 auto_delete=False)
+                                 type='topic')
 
 producer = kombu.messaging.Producer(exchange=exchange,
                                     channel=channel,
@@ -39,4 +38,4 @@ queue = kombu.Queue(name='queue-allcolours', exchange=exchange, routing_key='msg
 queue.maybe_bind(connection)
 queue.declare()
 
-producer.publish('black')
+producer.publish('black - {0}'.format(uuid.uuid4()))
